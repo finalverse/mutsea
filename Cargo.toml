@@ -1,0 +1,129 @@
+[workspace]
+resolver = "2"
+members = [
+    # Core Components
+    "mutsea-core",
+    "mutsea-network",
+    "mutsea-assets",
+    "mutsea-regions",
+    "mutsea-users",
+    "mutsea-physics",
+    
+    # OpenSim Compatibility
+    "mutsea-compatibility",
+    "mutsea-opensim-bridge",
+    "mutsea-protocol",
+    
+    # AI Components (Phase II)
+    "mutsea-ai-core",
+    "mutsea-ai-content",
+    "mutsea-ai-social",
+    "mutsea-ai-nlp",
+    
+    # Services
+    "mutsea-database",
+    "mutsea-cache",
+    "mutsea-messaging",
+    "mutsea-monitoring",
+    
+    # Tools and Utilities
+    "mutsea-cli",
+    "mutsea-tools",
+    "mutsea-config",
+    "mutsea-logging",
+    
+    # Server Applications
+    "mutsea-server",
+    "mutsea-grid-server",
+    "mutsea-asset-server",
+    "mutsea-user-server",
+    
+    # Testing and Examples
+    "mutsea-tests",
+    "mutsea-examples",
+    "mutsea-benchmarks",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Finalverse Team <team@finalverse.io>"]
+license = "Apache-2.0"
+homepage = "https://github.com/finalverse/mutsea"
+repository = "https://github.com/finalverse/mutsea"
+keywords = ["virtual-world", "metaverse", "opensim", "ai", "rust"]
+categories = ["game-development", "network-programming", "simulation"]
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+tokio-util = "0.7"
+futures = "0.3"
+async-trait = "0.1"
+
+# Networking
+quinn = "0.10"  # QUIC protocol
+hyper = { version = "1.0", features = ["full"] }
+axum = "0.7"
+tower = "0.4"
+tower-http = "0.5"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+bincode = "1.3"
+postcard = "1.0"
+
+# Database
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "mysql", "sqlite", "uuid", "chrono", "json"] }
+redis = { version = "0.24", features = ["tokio-comp", "connection-manager"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+color-eyre = "0.6"
+
+# Logging and metrics
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+metrics = "0.22"
+metrics-exporter-prometheus = "0.13"
+
+# UUID and time
+uuid = { version = "1.6", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Math and physics
+nalgebra = "0.32"
+rapier3d = "0.17"
+glam = "0.24"
+
+# Crypto
+sha2 = "0.10"
+aes-gcm = "0.10"
+rand = "0.8"
+
+# Configuration
+config = "0.14"
+clap = { version = "4.4", features = ["derive"] }
+
+# AI/ML (Phase II)
+candle-core = { version = "0.3" }
+candle-nn = { version = "0.3" }
+tokenizers = { version = "0.15" }
+ort = { version = "1.16" }
+
+# OpenSim compatibility
+libloading = "0.8"
+
+# Development tools
+criterion = { version = "0.5", features = ["html_reports"] }
+proptest = "1.4"
+
+[workspace.features]
+default = ["server", "client"]
+server = []
+client = []
+ai = ["candle-core", "candle-nn", "tokenizers", "ort"]
+opensim-compat = []
+full = ["ai", "opensim-compat"]

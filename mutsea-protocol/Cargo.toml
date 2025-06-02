@@ -1,0 +1,23 @@
+[package]
+name = "mutsea-protocol"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description = "OpenSim LLUDP and HTTP protocol implementation"
+
+[dependencies]
+mutsea-core = { path = "../mutsea-core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+bincode = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+bytes = "1.5"
+bitflags = "2.4"
+nom = "7.1"
+crc32fast = "1.3"

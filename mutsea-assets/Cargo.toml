@@ -1,0 +1,24 @@
+[package]
+name = "mutsea-assets"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description = "Asset management and storage for Mutsea"
+
+[dependencies]
+mutsea-core = { path = "../mutsea-core" }
+mutsea-database = { path = "../mutsea-database" }
+mutsea-cache = { path = "../mutsea-cache" }
+tokio = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+sha2 = { workspace = true }
+aws-sdk-s3 = "1.8"
+object_store = "0.8"
+lru = "0.12"

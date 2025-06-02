@@ -1,0 +1,24 @@
+[package]
+name = "mutsea-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description = "Core types, traits, and utilities for the Mutsea virtual world platform"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+nalgebra = { workspace = true }
+glam = { workspace = true }
+tracing = { workspace = true }
+
+[features]
+default = []
+ai = []
