@@ -1,7 +1,13 @@
 //! HTTP server implementation for web APIs and capabilities
 
-use crate::{NetworkError, NetworkResult};
-use mutsea_core::{Service, ServiceHealth, ServiceStatus, MutseaResult, config::HTTPConfig};
+use mutsea_core::{
+    Service, 
+    ServiceHealth, 
+    ServiceStatus, 
+    MutseaResult, 
+    config::HTTPConfig, 
+    NetworkError, 
+    NetworkResult};
 use axum::{
     extract::{Path, Query, State},
     http::StatusCode,
@@ -155,15 +161,15 @@ async fn login_handler(
             <value>
                 <struct>
                     <member>
-                        <name>login</name>
+                        <n>login</n>
                         <value><string>false</string></value>
                     </member>
                     <member>
-                        <name>reason</name>
+                        <n>reason</n>
                         <value><string>Login system not yet implemented</string></value>
                     </member>
                     <member>
-                        <name>message</name>
+                        <n>message</n>
                         <value><string>Mutsea is still in development</string></value>
                     </member>
                 </struct>

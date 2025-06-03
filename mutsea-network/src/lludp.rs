@@ -1,7 +1,7 @@
 //! LLUDP server implementation for OpenSim compatibility
 
-use crate::{NetworkError, NetworkResult, ClientSession, SessionManager};
-use mutsea_core::{Service, ServiceHealth, ServiceStatus, MutseaResult, config::LLUDPConfig};
+use crate::{ClientSession, SessionManager};
+use mutsea_core::{Service, ServiceHealth, ServiceStatus, MutseaResult, config::LLUDPConfig, NetworkError, NetworkResult};
 use mutsea_protocol::{Packet, PacketHeader, constants::*};
 use std::collections::HashMap;
 use std::net::SocketAddr;
@@ -9,7 +9,6 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::net::UdpSocket;
 use tokio::sync::RwLock;
-use tokio::time::interval;
 use tracing::{debug, error, info, warn};
 
 /// LLUDP server for handling OpenSim viewer connections
