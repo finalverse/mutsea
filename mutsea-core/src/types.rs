@@ -13,12 +13,12 @@ impl UserId {
     pub fn new() -> Self {
         Self(Uuid::new_v4())
     }
-    
+
     /// Create UserId from UUID
     pub fn from_uuid(uuid: Uuid) -> Self {
         Self(uuid)
     }
-    
+
     /// Get the underlying UUID
     pub fn as_uuid(&self) -> Uuid {
         self.0
@@ -46,12 +46,12 @@ impl AssetId {
     pub fn new() -> Self {
         Self(Uuid::new_v4())
     }
-    
+
     /// Create AssetId from UUID
     pub fn from_uuid(uuid: Uuid) -> Self {
         Self(uuid)
     }
-    
+
     /// Get the underlying UUID
     pub fn as_uuid(&self) -> Uuid {
         self.0
@@ -79,12 +79,12 @@ impl RegionId {
     pub fn new() -> Self {
         Self(Uuid::new_v4())
     }
-    
+
     /// Create RegionId from UUID
     pub fn from_uuid(uuid: Uuid) -> Self {
         Self(uuid)
     }
-    
+
     /// Get the underlying UUID
     pub fn as_uuid(&self) -> Uuid {
         self.0
@@ -112,12 +112,12 @@ impl ObjectId {
     pub fn new() -> Self {
         Self(Uuid::new_v4())
     }
-    
+
     /// Create ObjectId from UUID
     pub fn from_uuid(uuid: Uuid) -> Self {
         Self(uuid)
     }
-    
+
     /// Get the underlying UUID
     pub fn as_uuid(&self) -> Uuid {
         self.0
@@ -145,18 +145,30 @@ pub struct Vector3 {
 }
 
 impl Vector3 {
-    pub const ZERO: Vector3 = Vector3 { x: 0.0, y: 0.0, z: 0.0 };
-    pub const ONE: Vector3 = Vector3 { x: 1.0, y: 1.0, z: 1.0 };
-    pub const UP: Vector3 = Vector3 { x: 0.0, y: 0.0, z: 1.0 };
-    
+    pub const ZERO: Vector3 = Vector3 {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    pub const ONE: Vector3 = Vector3 {
+        x: 1.0,
+        y: 1.0,
+        z: 1.0,
+    };
+    pub const UP: Vector3 = Vector3 {
+        x: 0.0,
+        y: 0.0,
+        z: 1.0,
+    };
+
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
     }
-    
+
     pub fn length(&self) -> f32 {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }
-    
+
     pub fn normalize(&self) -> Self {
         let len = self.length();
         if len > 0.0 {
@@ -169,11 +181,11 @@ impl Vector3 {
             *self
         }
     }
-    
+
     pub fn dot(&self, other: &Vector3) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
-    
+
     pub fn cross(&self, other: &Vector3) -> Vector3 {
         Vector3 {
             x: self.y * other.z - self.z * other.y,
@@ -185,7 +197,7 @@ impl Vector3 {
 
 impl std::ops::Add for Vector3 {
     type Output = Vector3;
-    
+
     fn add(self, other: Vector3) -> Vector3 {
         Vector3 {
             x: self.x + other.x,
@@ -197,7 +209,7 @@ impl std::ops::Add for Vector3 {
 
 impl std::ops::Sub for Vector3 {
     type Output = Vector3;
-    
+
     fn sub(self, other: Vector3) -> Vector3 {
         Vector3 {
             x: self.x - other.x,
@@ -209,7 +221,7 @@ impl std::ops::Sub for Vector3 {
 
 impl std::ops::Mul<f32> for Vector3 {
     type Output = Vector3;
-    
+
     fn mul(self, scalar: f32) -> Vector3 {
         Vector3 {
             x: self.x * scalar,
@@ -229,17 +241,22 @@ pub struct Quaternion {
 }
 
 impl Quaternion {
-    pub const IDENTITY: Quaternion = Quaternion { x: 0.0, y: 0.0, z: 0.0, w: 1.0 };
-    
+    pub const IDENTITY: Quaternion = Quaternion {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+        w: 1.0,
+    };
+
     pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
         Self { x, y, z, w }
     }
-    
+
     pub fn from_axis_angle(axis: Vector3, angle: f32) -> Self {
         let half_angle = angle * 0.5;
         let sin_half = half_angle.sin();
         let cos_half = half_angle.cos();
-        
+
         Self {
             x: axis.x * sin_half,
             y: axis.y * sin_half,
@@ -247,7 +264,7 @@ impl Quaternion {
             w: cos_half,
         }
     }
-    
+
     pub fn normalize(&self) -> Self {
         let len = (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt();
         if len > 0.0 {
@@ -338,7 +355,12 @@ pub struct UserAccount {
 }
 
 impl UserAccount {
-    pub fn new(first_name: String, last_name: String, email: Option<String>, password_hash: String) -> Self {
+    pub fn new(
+        first_name: String,
+        last_name: String,
+        email: Option<String>,
+        password_hash: String,
+    ) -> Self {
         Self {
             user_id: UserId::new(),
             first_name,
@@ -352,7 +374,7 @@ impl UserAccount {
             user_title: None,
         }
     }
-    
+
     pub fn full_name(&self) -> String {
         format!("{} {}", self.first_name, self.last_name)
     }
@@ -392,7 +414,7 @@ impl Asset {
             creator_id,
         }
     }
-    
+
     pub fn size(&self) -> usize {
         self.data.len()
     }
@@ -429,11 +451,11 @@ impl RegionInfo {
             region_name,
             location_x,
             location_y,
-            size_x: 256,  // Default region size
+            size_x: 256, // Default region size
             size_y: 256,
             external_endpoint,
             internal_endpoint,
-            access: 1,    // Public access
+            access: 1, // Public access
             scope_id: Uuid::new_v4(),
             estate_id: 1,
             flags: 0,

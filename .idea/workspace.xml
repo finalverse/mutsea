@@ -92,15 +92,40 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94ff4938-59e3-41ae-ad94-8bfa5be4d9fb" name="Changes" comment="" />
+    <list default="true" id="94ff4938-59e3-41ae-ad94-8bfa5be4d9fb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/mutsea.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mutsea-network/mutsea-network/src/http.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mutsea-network/mutsea-network/src/lludp.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-assets/mutsea-assets/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-assets/mutsea-assets/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-assets/mutsea-assets/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-assets/mutsea-assets/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-cli/mutsea-cli/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-cli/mutsea-cli/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-cli/mutsea-cli/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-cli/mutsea-cli/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/config.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/config.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/math.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/math.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/traits.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/traits.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-core/mutsea-core/src/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/mutsea-network/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/mutsea-network/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/mutsea-network/src/message.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/mutsea-network/src/message.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-server/mutsea-server/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-server/mutsea-server/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-server/mutsea-server/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-server/mutsea-server/src/main.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/mutsea-network" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="Fqlk9aZG" />
@@ -115,11 +140,13 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Cargo.Run mutsea-cli.executor": "Run",
+    "Cargo.Run mutsea-server.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "SHELLCHECK.PATH": "/Users/wenyan/Library/Application Support/JetBrains/RustRover2025.1/plugins/Shell Script/shellcheck",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/wenyan/mutsea/mutsea",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -132,8 +159,26 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Cargo.Test mutsea">
+  <component name="RunManager" selected="Cargo.Run mutsea-server">
+    <configuration name="Run mutsea-cli" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --package mutsea-cli --bin mutsea-cli" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run mutsea-server" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package mutsea-server --bin mutsea-server" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -168,6 +213,11 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Cargo.Run mutsea-server" />
+      <item itemvalue="Cargo.Run mutsea-cli" />
+      <item itemvalue="Cargo.Test mutsea" />
+    </list>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -180,11 +230,22 @@
       <option name="presentableId" value="Default" />
       <updated>1748712384380</updated>
       <workItem from="1748712385740" duration="3859000" />
-      <workItem from="1748813300653" duration="9085000" />
+      <workItem from="1748813300653" duration="16282000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/mutsea-network/src/http.rs</url>
+          <line>2</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

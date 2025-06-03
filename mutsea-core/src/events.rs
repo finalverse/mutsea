@@ -1,6 +1,6 @@
 //! Event system for Mutsea
 
-use crate::{UserId, RegionId, ObjectId, AssetId, Vector3, Quaternion};
+use crate::{AssetId, ObjectId, Quaternion, RegionId, UserId, Vector3};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -8,10 +8,10 @@ use std::collections::HashMap;
 pub trait Event: Send + Sync + std::fmt::Debug {
     /// Get the event type name
     fn event_type(&self) -> &'static str;
-    
+
     /// Get the event timestamp
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
-    
+
     /// Get the event ID
     fn event_id(&self) -> uuid::Uuid;
 }
@@ -45,7 +45,7 @@ impl Event for MutseaEvent {
             MutseaEvent::System(_) => "system",
         }
     }
-    
+
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc> {
         match self {
             MutseaEvent::User(e) => e.timestamp,
@@ -56,7 +56,7 @@ impl Event for MutseaEvent {
             MutseaEvent::System(e) => e.timestamp,
         }
     }
-    
+
     fn event_id(&self) -> uuid::Uuid {
         match self {
             MutseaEvent::User(e) => e.event_id,
@@ -328,61 +328,111 @@ pub struct EventBuilder;
 
 impl EventBuilder {
     /// Create a new user login event
-    pub fn user_login(user_id: UserId, session_id: uuid::Uuid, client_info: String, region_id: Option<RegionId>) -> MutseaEvent {
+    pub fn user_login(
+        user_id: UserId,
+        session_id: uuid::Uuid,
+        client_info: String,
+        region_id: Option<RegionId>,
+    ) -> MutseaEvent {
         MutseaEvent::User(UserEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             user_id,
             region_id,
-            event_data: UserEventData::Login { session_id, client_info },
+            event_data: UserEventData::Login {
+                session_id,
+                client_info,
+            },
         })
     }
-    
+
     /// Create a new user movement event
-    pub fn user_movement(user_id: UserId, old_position: Vector3, new_position: Vector3, velocity: Vector3, region_id: Option<RegionId>) -> MutseaEvent {
+    pub fn user_movement(
+        user_id: UserId,
+        old_position: Vector3,
+        new_position: Vector3,
+        velocity: Vector3,
+        region_id: Option<RegionId>,
+    ) -> MutseaEvent {
         MutseaEvent::User(UserEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             user_id,
             region_id,
-            event_data: UserEventData::Movement { old_position, new_position, velocity },
+            event_data: UserEventData::Movement {
+                old_position,
+                new_position,
+                velocity,
+            },
         })
     }
-    
+
     /// Create a new chat event
-    pub fn user_chat(user_id: UserId, message: String, chat_type: ChatType, channel: i32, region_id: Option<RegionId>) -> MutseaEvent {
+    pub fn user_chat(
+        user_id: UserId,
+        message: String,
+        chat_type: ChatType,
+        channel: i32,
+        region_id: Option<RegionId>,
+    ) -> MutseaEvent {
         MutseaEvent::User(UserEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             user_id,
             region_id,
-            event_data: UserEventData::Chat { message, chat_type, channel },
+            event_data: UserEventData::Chat {
+                message,
+                chat_type,
+                channel,
+            },
         })
     }
-    
+
     /// Create a new object created event
-    pub fn object_created(object_id: ObjectId, creator_id: UserId, position: Vector3, object_type: String, region_id: RegionId) -> MutseaEvent {
+    pub fn object_created(
+        object_id: ObjectId,
+        creator_id: UserId,
+        position: Vector3,
+        object_type: String,
+        region_id: RegionId,
+    ) -> MutseaEvent {
         MutseaEvent::Object(ObjectEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             object_id,
             region_id,
-            event_data: ObjectEventData::Created { creator_id, position, object_type },
+            event_data: ObjectEventData::Created {
+                creator_id,
+                position,
+                object_type,
+            },
         })
     }
-    
+
     /// Create a new asset created event
-    pub fn asset_created(asset_id: AssetId, creator_id: UserId, asset_type: crate::AssetType, size: usize) -> MutseaEvent {
+    pub fn asset_created(
+        asset_id: AssetId,
+        creator_id: UserId,
+        asset_type: crate::AssetType,
+        size: usize,
+    ) -> MutseaEvent {
         MutseaEvent::Asset(AssetEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             asset_id,
-            event_data: AssetEventData::Created { creator_id, asset_type, size },
+            event_data: AssetEventData::Created {
+                creator_id,
+                asset_type,
+                size,
+            },
         })
     }
-    
+
     /// Create a new region started event
-    pub fn region_started(region_id: RegionId, startup_duration: std::time::Duration) -> MutseaEvent {
+    pub fn region_started(
+        region_id: RegionId,
+        startup_duration: std::time::Duration,
+    ) -> MutseaEvent {
         MutseaEvent::Region(RegionEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
@@ -390,13 +440,21 @@ impl EventBuilder {
             event_data: RegionEventData::Started { startup_duration },
         })
     }
-    
+
     /// Create a new system error event
-    pub fn system_error(component: String, error_message: String, error_code: Option<i32>) -> MutseaEvent {
+    pub fn system_error(
+        component: String,
+        error_message: String,
+        error_code: Option<i32>,
+    ) -> MutseaEvent {
         MutseaEvent::System(SystemEvent {
             event_id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            event_data: SystemEventData::Error { component, error_message, error_code },
+            event_data: SystemEventData::Error {
+                component,
+                error_message,
+                error_code,
+            },
         })
     }
 }
@@ -422,25 +480,25 @@ impl EventFilter {
             asset_ids: None,
         }
     }
-    
+
     /// Filter by event types
     pub fn with_event_types(mut self, event_types: Vec<String>) -> Self {
         self.event_types = Some(event_types);
         self
     }
-    
+
     /// Filter by user IDs
     pub fn with_user_ids(mut self, user_ids: Vec<UserId>) -> Self {
         self.user_ids = Some(user_ids);
         self
     }
-    
+
     /// Filter by region IDs
     pub fn with_region_ids(mut self, region_ids: Vec<RegionId>) -> Self {
         self.region_ids = Some(region_ids);
         self
     }
-    
+
     /// Check if an event matches this filter
     pub fn matches(&self, event: &MutseaEvent) -> bool {
         // Check event type filter
@@ -449,7 +507,7 @@ impl EventFilter {
                 return false;
             }
         }
-        
+
         // Check user ID filter
         if let Some(ref user_ids) = self.user_ids {
             match event {
@@ -458,37 +516,55 @@ impl EventFilter {
                         return false;
                     }
                 }
-                MutseaEvent::Object(e) => {
-                    match &e.event_data {
-                        ObjectEventData::Created { creator_id, .. } |
-                        ObjectEventData::Destroyed { destroyer_id: creator_id } |
-                        ObjectEventData::Moved { mover_id: creator_id, .. } |
-                        ObjectEventData::Rotated { rotator_id: creator_id, .. } |
-                        ObjectEventData::Scaled { scaler_id: creator_id, .. } |
-                        ObjectEventData::Touched { toucher_id: creator_id, .. } => {
-                            if !user_ids.contains(creator_id) {
-                                return false;
-                            }
-                        }
-                        _ => {}
+                MutseaEvent::Object(e) => match &e.event_data {
+                    ObjectEventData::Created { creator_id, .. }
+                    | ObjectEventData::Destroyed {
+                        destroyer_id: creator_id,
                     }
-                }
-                MutseaEvent::Asset(e) => {
-                    match &e.event_data {
-                        AssetEventData::Created { creator_id, .. } |
-                        AssetEventData::Accessed { accessor_id: creator_id, .. } |
-                        AssetEventData::Modified { modifier_id: creator_id, .. } |
-                        AssetEventData::Deleted { deleter_id: creator_id } => {
-                            if !user_ids.contains(creator_id) {
-                                return false;
-                            }
+                    | ObjectEventData::Moved {
+                        mover_id: creator_id,
+                        ..
+                    }
+                    | ObjectEventData::Rotated {
+                        rotator_id: creator_id,
+                        ..
+                    }
+                    | ObjectEventData::Scaled {
+                        scaler_id: creator_id,
+                        ..
+                    }
+                    | ObjectEventData::Touched {
+                        toucher_id: creator_id,
+                        ..
+                    } => {
+                        if !user_ids.contains(creator_id) {
+                            return false;
                         }
                     }
-                }
+                    _ => {}
+                },
+                MutseaEvent::Asset(e) => match &e.event_data {
+                    AssetEventData::Created { creator_id, .. }
+                    | AssetEventData::Accessed {
+                        accessor_id: creator_id,
+                        ..
+                    }
+                    | AssetEventData::Modified {
+                        modifier_id: creator_id,
+                        ..
+                    }
+                    | AssetEventData::Deleted {
+                        deleter_id: creator_id,
+                    } => {
+                        if !user_ids.contains(creator_id) {
+                            return false;
+                        }
+                    }
+                },
                 _ => {}
             }
         }
-        
+
         // Check region ID filter
         if let Some(ref region_ids) = self.region_ids {
             match event {
@@ -512,7 +588,7 @@ impl EventFilter {
                 _ => {}
             }
         }
-        
+
         // Check object ID filter
         if let Some(ref object_ids) = self.object_ids {
             if let MutseaEvent::Object(e) = event {
@@ -521,7 +597,7 @@ impl EventFilter {
                 }
             }
         }
-        
+
         // Check asset ID filter
         if let Some(ref asset_ids) = self.asset_ids {
             if let MutseaEvent::Asset(e) = event {
@@ -530,7 +606,7 @@ impl EventFilter {
                 }
             }
         }
-        
+
         true
     }
 }

@@ -214,10 +214,10 @@ Mutsea is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for deta
 
 ## Support
 
-- **Documentation**: [docs.mutsea.dev](https://docs.mutsea.dev)
+- **Documentation**: [docs.mutsea.com](https://docs.mutsea.com)
 - **Discord**: [Join our community](https://discord.gg/mutsea)
 - **GitHub Issues**: [Report bugs and request features](https://github.com/finalverse/mutsea/issues)
-- **Email**: support@finalverse.io
+- **Email**: support@finalverse.com
 
 ## Acknowledgments
 

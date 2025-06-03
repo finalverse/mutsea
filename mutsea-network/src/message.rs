@@ -291,7 +291,7 @@ impl Message for AssetRequestMessage {
         bincode::deserialize(data).map_err(|e| crate::NetworkError::Serialization(e.to_string()))
     }
 }
-
+ 
 /// Asset response message
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AssetResponseMessage {

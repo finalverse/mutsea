@@ -18,6 +18,8 @@ uuid = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
+bincode = { workspace = true }
+async-trait = { workspace = true }
 sha2 = { workspace = true }
 aws-sdk-s3 = "1.8"
 object_store = "0.8"

@@ -6,7 +6,12 @@ authors.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
-keywords.workspace = true
-categories.workspace = true
+description = "Mutsea virtual world server"
 
 [dependencies]
+mutsea-core = { path = "../mutsea-core" }
+mutsea-network = { path = "../mutsea-network" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }

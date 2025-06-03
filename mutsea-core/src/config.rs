@@ -536,15 +536,18 @@ impl Default for AIConfig {
                 enabled: false,
                 text_to_3d_endpoint: "http://localhost:8001/text-to-3d".to_string(),
                 texture_generation_endpoint: "http://localhost:8001/generate-texture".to_string(),
-                animation_generation_endpoint: "http://localhost:8001/generate-animation".to_string(),
+                animation_generation_endpoint: "http://localhost:8001/generate-animation"
+                    .to_string(),
                 max_generation_time: 30,
                 quality_level: "medium".to_string(),
                 enable_caching: true,
             },
             social_intelligence: SocialIntelligenceConfig {
                 enabled: false,
-                relationship_analysis_endpoint: "http://localhost:8002/analyze-relationships".to_string(),
-                conversation_facilitation_endpoint: "http://localhost:8002/facilitate-conversation".to_string(),
+                relationship_analysis_endpoint: "http://localhost:8002/analyze-relationships"
+                    .to_string(),
+                conversation_facilitation_endpoint: "http://localhost:8002/facilitate-conversation"
+                    .to_string(),
                 group_dynamics_endpoint: "http://localhost:8002/predict-group-dynamics".to_string(),
                 update_interval: 60,
             },
@@ -555,7 +558,12 @@ impl Default for AIConfig {
                 sentiment_model: "cardiffnlp/twitter-roberta-base-sentiment-latest".to_string(),
                 language_model: "papluca/xlm-roberta-base-language-detection".to_string(),
                 default_language: "en".to_string(),
-                supported_languages: vec!["en".to_string(), "es".to_string(), "fr".to_string(), "de".to_string()],
+                supported_languages: vec![
+                    "en".to_string(),
+                    "es".to_string(),
+                    "fr".to_string(),
+                    "de".to_string(),
+                ],
             },
             maple_ai: MapleAIConfig {
                 enabled: false,
@@ -596,79 +604,84 @@ impl Default for MutseaConfig {
 
 impl MutseaConfig {
     /// Load configuration from a file
-    pub fn from_file<P: AsRef<std::path::Path>>(path: P) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn from_file<P: AsRef<std::path::Path>>(
+        path: P,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
         let content = std::fs::read_to_string(path)?;
         let config: MutseaConfig = toml::from_str(&content)?;
         Ok(config)
     }
-    
+
     /// Save configuration to a file
-    pub fn to_file<P: AsRef<std::path::Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn to_file<P: AsRef<std::path::Path>>(
+        &self,
+        path: P,
+    ) -> Result<(), Box<dyn std::error::Error>> {
         let content = toml::to_string_pretty(self)?;
         std::fs::write(path, content)?;
         Ok(())
     }
-    
+
     /// Load configuration from environment variables
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
         let mut config = Self::default();
-        
+
         // Override with environment variables
         if let Ok(val) = std::env::var("MUTSEA_SERVER_PORT") {
             config.server.port = val.parse()?;
         }
-        
+
         if let Ok(val) = std::env::var("MUTSEA_DATABASE_URL") {
             config.database.url = val;
         }
-        
+
         if let Ok(val) = std::env::var("MUTSEA_REDIS_URL") {
             config.cache.redis_url = Some(val);
         }
-        
+
         // Add more environment variable overrides as needed
-        
+
         Ok(config)
     }
-    
+
     /// Merge with another configuration
     pub fn merge(&mut self, other: MutseaConfig) {
         // Merge custom values
         for (key, value) in other.custom {
             self.custom.insert(key, value);
         }
-        
+
         // Override specific values if needed
         if other.server.port != ServerConfig::default().port {
             self.server.port = other.server.port;
         }
-        
+
         // Add more selective merging logic as needed
     }
-    
+
     /// Validate the configuration
     pub fn validate(&self) -> Result<(), Vec<String>> {
         let mut errors = Vec::new();
-        
+
         // Validate server configuration
         if self.server.port == 0 {
             errors.push("Server port must be greater than 0".to_string());
         }
-        
+
         if self.server.max_connections == 0 {
             errors.push("Max connections must be greater than 0".to_string());
         }
-        
+
         // Validate database configuration
         if self.database.url.is_empty() {
             errors.push("Database URL is required".to_string());
         }
-        
+
         // Validate security configuration
         if self.security.enable_auth && self.security.jwt_secret == "change-me-in-production" {
             errors.push("JWT secret must be changed in production".to_string());
         }
-        
+
         // Validate asset configuration
         match self.assets.backend.as_str() {
             "local" => {
@@ -683,7 +696,9 @@ impl MutseaConfig {
             }
             "azure" => {
                 if self.assets.azure.is_none() {
-                    errors.push("Azure configuration is required for Azure asset backend".to_string());
+                    errors.push(
+                        "Azure configuration is required for Azure asset backend".to_string(),
+                    );
                 }
             }
             "gcp" => {
@@ -695,7 +710,7 @@ impl MutseaConfig {
                 errors.push(format!("Unknown asset backend: {}", self.assets.backend));
             }
         }
-        
+
         if errors.is_empty() {
             Ok(())
         } else {
@@ -707,7 +722,7 @@ impl MutseaConfig {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_default_config() {
         let config = MutseaConfig::default();
@@ -716,27 +731,33 @@ mod tests {
         assert!(config.opensim.enabled);
         assert!(!config.ai.enabled);
     }
-    
+
     #[test]
     fn test_config_validation() {
         let mut config = MutseaConfig::default();
         assert!(config.validate().is_ok());
-        
+
         config.server.port = 0;
         assert!(config.validate().is_err());
     }
-    
+
     #[test]
     fn test_config_merge() {
         let mut config1 = MutseaConfig::default();
         let mut config2 = MutseaConfig::default();
-        
+
         config2.server.port = 8080;
-        config2.custom.insert("test_key".to_string(), serde_json::Value::String("test_value".to_string()));
-        
+        config2.custom.insert(
+            "test_key".to_string(),
+            serde_json::Value::String("test_value".to_string()),
+        );
+
         config1.merge(config2);
-        
+
         assert_eq!(config1.server.port, 8080);
-        assert_eq!(config1.custom.get("test_key").unwrap(), &serde_json::Value::String("test_value".to_string()));
+        assert_eq!(
+            config1.custom.get("test_key").unwrap(),
+            &serde_json::Value::String("test_value".to_string())
+        );
     }
 }

@@ -1,0 +1,143 @@
+# Mutsea Configuration File
+# Copy this file to mutsea.toml and customize for your deployment
+
+[server]
+name = "Mutsea Server"
+bind_address = "0.0.0.0"
+port = 9000
+max_connections = 1000
+worker_threads = 0  # 0 = auto-detect
+request_timeout = 30
+keep_alive_timeout = 300
+enable_monitoring = true
+monitoring_address = "127.0.0.1"
+monitoring_port = 9001
+
+[database]
+url = "postgresql://mutsea:mutsea@localhost/mutsea"
+max_connections = 100
+min_connections = 5
+connect_timeout = 30
+query_timeout = 60
+auto_migrate = true
+log_queries = false
+
+[cache]
+cache_type = "redis"
+redis_url = "redis://localhost:6379"
+max_memory_mb = 1024
+default_ttl = 3600
+enable_compression = true
+
+[network.lludp]
+bind_address = "0.0.0.0"
+port = 9000
+max_packet_size = 1200
+resend_timeout = 100
+max_resends = 3
+ack_timeout = 1000
+ping_interval = 5
+client_timeout = 60
+
+[network.http]
+bind_address = "0.0.0.0"
+port = 8080
+enable_https = false
+enable_cors = true
+cors_origins = ["*"]
+
+[network.rate_limiting]
+enabled = true
+requests_per_minute = 60
+burst_limit = 10
+ban_duration = 5
+
+[logging]
+level = "info"
+format = "pretty"
+log_to_file = true
+log_file = "logs/mutsea.log"
+max_file_size_mb = 100
+max_files = 10
+structured = true
+
+[security]
+enable_auth = true
+password_hash_algorithm = "bcrypt"
+password_hash_cost = 12
+session_timeout = 24
+jwt_secret = "change-me-in-production"
+enable_ip_whitelist = false
+ip_whitelist = []
+enable_ip_blacklist = false
+ip_blacklist = []
+
+[assets]
+backend = "local"
+local_path = "data/assets"
+max_asset_size_mb = 100
+enable_compression = true
+cache_ttl = 3600
+
+# Uncomment and configure for S3 storage
+# [assets.s3]
+# bucket = "mutsea-assets"
+# region = "us-west-2"
+# access_key_id = "your-access-key"
+# secret_access_key = "your-secret-key"
+
+[opensim]
+enabled = true
+grid_name = "Mutsea Grid"
+grid_nick = "mutsea"
+login_uri = "http://localhost:8080/"
+grid_info_uri = "http://localhost:8080/get_grid_info"
+default_start_location = "home"
+default_home_location = "last"
+currency_symbol = "M$"
+real_currency_symbol = "USD"
+directory_fee = 30
+upload_fee = 0
+group_creation_fee = 0
+enable_voice = true
+enable_search = true
+enable_destination_guide = true
+grid_owner = "Mutsea Administrator"
+grid_owner_email = "admin@mutsea.dev"
+
+# AI features (Phase II - set enabled = true when ready)
+[ai]
+enabled = false
+
+[ai.content_generation]
+enabled = false
+text_to_3d_endpoint = "http://localhost:8001/text-to-3d"
+texture_generation_endpoint = "http://localhost:8001/generate-texture"
+animation_generation_endpoint = "http://localhost:8001/generate-animation"
+max_generation_time = 30
+quality_level = "medium"
+enable_caching = true
+
+[ai.social_intelligence]
+enabled = false
+relationship_analysis_endpoint = "http://localhost:8002/analyze-relationships"
+conversation_facilitation_endpoint = "http://localhost:8002/facilitate-conversation"
+group_dynamics_endpoint = "http://localhost:8002/predict-group-dynamics"
+update_interval = 60
+
+[ai.nlp]
+enabled = false
+intent_model = "distilbert-base-uncased"
+entity_model = "dbmdz/bert-large-cased-finetuned-conll03-english"
+sentiment_model = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+language_model = "papluca/xlm-roberta-base-language-detection"
+default_language = "en"
+supported_languages = ["en", "es", "fr", "de"]
+
+[ai.maple_ai]
+enabled = false
+server_endpoint = "http://localhost:8003"
+agent_capabilities = ["design", "physics", "social", "narrative"]
+consensus_timeout = 5
+max_concurrent_sessions = 100
+
