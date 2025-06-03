@@ -2,14 +2,13 @@
 
 use crate::{ClientSession, SessionManager};
 use mutsea_core::{Service, ServiceHealth, ServiceStatus, MutseaResult, config::LLUDPConfig, NetworkError, NetworkResult};
-use mutsea_protocol::{Packet, PacketHeader, constants::*};
-use std::collections::HashMap;
+use mutsea_protocol::{Packet, constants::*};
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::net::UdpSocket;
 use tokio::sync::RwLock;
-use tracing::{debug, error, info, warn};
+use tracing::{debug, error, info};
 
 /// LLUDP server for handling OpenSim viewer connections
 pub struct LLUDPServer {

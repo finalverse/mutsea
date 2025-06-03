@@ -2,7 +2,6 @@
 
 use mutsea_core::{UserId, RegionId, ObjectId, AssetId, Vector3, Quaternion};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Base message trait for all network messages
 pub trait Message: Send + Sync + std::fmt::Debug {

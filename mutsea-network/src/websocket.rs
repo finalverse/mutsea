@@ -5,11 +5,10 @@ use mutsea_core::{
     ServiceHealth, 
     ServiceStatus, 
     MutseaResult, 
-    NetworkError, 
     NetworkResult
 };
 use std::sync::Arc;
-use tracing::{info, error};
+use tracing::info;
 
 /// WebSocket server for real-time communication
 pub struct WebSocketServer {

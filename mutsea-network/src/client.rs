@@ -1,7 +1,6 @@
 //! Client connection and management
 
-use crate::{NetworkError, NetworkResult};
-use mutsea_core::{UserId, Vector3, Quaternion};
+use mutsea_core::UserId;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Instant;

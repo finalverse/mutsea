@@ -125,7 +125,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/mutsea-network" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/mutsea-core" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="Fqlk9aZG" />
@@ -159,7 +159,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Cargo.Run mutsea-cli">
+  <component name="RunManager" selected="Cargo.Run mutsea-server">
     <configuration name="Run mutsea-cli" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package mutsea-cli --bin mutsea-cli" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -230,7 +230,7 @@
       <option name="presentableId" value="Default" />
       <updated>1748712384380</updated>
       <workItem from="1748712385740" duration="3859000" />
-      <workItem from="1748813300653" duration="19051000" />
+      <workItem from="1748813300653" duration="19742000" />
     </task>
     <servers />
   </component>

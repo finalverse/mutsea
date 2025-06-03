@@ -6,16 +6,14 @@ use mutsea_core::{
     ServiceStatus, 
     MutseaResult, 
     config::HTTPConfig, 
-    NetworkError, 
     NetworkResult};
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, State},
     http::StatusCode,
     response::Json,
     routing::{get, post},
     Router,
 };
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;

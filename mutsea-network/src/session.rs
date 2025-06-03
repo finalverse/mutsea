@@ -1,6 +1,6 @@
 //! Client session management
 
-use mutsea_core::{UserId, RegionId, Vector3, Quaternion, NetworkError, NetworkResult};
+use mutsea_core::{UserId, RegionId, Vector3, Quaternion};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
