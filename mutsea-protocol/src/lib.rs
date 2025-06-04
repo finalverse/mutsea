@@ -13,43 +13,13 @@ pub mod codec;
 pub mod caps;
 pub mod login;
 pub mod error;
+pub mod constants;
 
 // Re-export commonly used types
 pub use error::*;
 pub use packet::*;
 pub use codec::*;
-
-/// Protocol constants
-pub mod constants {
-    /// Maximum UDP packet size
-    pub const MAX_PACKET_SIZE: usize = 1200;
-    
-    /// LLUDP header size
-    pub const LLUDP_HEADER_SIZE: usize = 10;
-    
-    /// Maximum payload size
-    pub const MAX_PAYLOAD_SIZE: usize = MAX_PACKET_SIZE - LLUDP_HEADER_SIZE;
-    
-    /// Packet flags
-    pub mod flags {
-        pub const RELIABLE: u8 = 0x40;
-        pub const RESENT: u8 = 0x20;
-        pub const ACK: u8 = 0x10;
-        pub const ZEROCODED: u8 = 0x80;
-        pub const APPENDED_ACKS: u8 = 0x01;
-    }
-    
-    /// Packet types
-    pub mod packet_types {
-        pub const PACKET_ACK: u8 = 0xFF;
-        pub const START_PING_CHECK: u8 = 0x01;
-        pub const COMPLETE_PING_CHECK: u8 = 0x02;
-        pub const AGENT_UPDATE: u8 = 0x04;
-        pub const LOGOUT_REQUEST: u8 = 0x06;
-        pub const REGION_HANDSHAKE: u8 = 0x94;
-        pub const REGION_HANDSHAKE_REPLY: u8 = 0x95;
-    }
-}
+pub use constants::*;
 
 use mutsea_core::{MutseaResult, UserId, RegionId};
 use serde::{Deserialize, Serialize};

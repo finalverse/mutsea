@@ -6,7 +6,7 @@
 #![warn(missing_docs)]
 #![warn(clippy::all)]
 
-pub mod lludp;
+pub mod lludp_server;
 pub mod http;
 pub mod websocket;
 pub mod client;
@@ -26,7 +26,7 @@ use tokio::sync::RwLock;
 
 /// Network service that manages all network protocols
 pub struct NetworkService {
-    lludp_server: Arc<RwLock<Option<lludp::LLUDPServer>>>,
+    lludp_server: Arc<RwLock<Option<lludp_server::LLUDPServer>>>,
     http_server: Arc<RwLock<Option<http::HTTPServer>>>,
     websocket_server: Arc<RwLock<Option<websocket::WebSocketServer>>>,
     running: Arc<std::sync::atomic::AtomicBool>,
@@ -45,7 +45,7 @@ impl NetworkService {
     
     /// Start LLUDP server for Firestorm compatibility
     pub async fn start_lludp(&self, config: &mutsea_core::config::LLUDPConfig) -> MutseaResult<()> {
-        let server = lludp::LLUDPServer::new(config).await
+        let server = lludp_server::LLUDPServer::new(config).await
             .map_err(|e| mutsea_core::MutseaError::Network(e.to_string()))?;
         *self.lludp_server.write().await = Some(server);
         Ok(())

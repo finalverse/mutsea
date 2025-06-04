@@ -1,3 +1,4 @@
+# mutsea-network/Cargo.toml
 [package]
 name = "mutsea-network"
 version.workspace = true
@@ -6,7 +7,7 @@ authors.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
-description = "Network protocols and communication for Mutsea"
+description = "Network protocols and communication for Mutsea with OpenSim compatibility"
 
 [dependencies]
 mutsea-core = { path = "../mutsea-core" }
@@ -27,5 +28,5 @@ axum = { workspace = true }
 tower = { workspace = true }
 tower-http = { workspace = true }
 hyper = { workspace = true }
-serde_json = "1.0.140"
-chrono = { version = "0.4.41", features = [] }
+serde_json = { workspace = true }
+chrono = { workspace = true }

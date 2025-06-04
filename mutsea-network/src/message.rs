@@ -2,6 +2,7 @@
 
 use mutsea_core::{UserId, RegionId, ObjectId, AssetId, Vector3, Quaternion};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// Base message trait for all network messages
 pub trait Message: Send + Sync + std::fmt::Debug {
@@ -290,7 +291,7 @@ impl Message for AssetRequestMessage {
         bincode::deserialize(data).map_err(|e| crate::NetworkError::Serialization(e.to_string()))
     }
 }
- 
+
 /// Asset response message
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AssetResponseMessage {

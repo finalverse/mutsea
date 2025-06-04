@@ -3,7 +3,7 @@ resolver = "2"
 members = [
     # Core Components
     "mutsea-core",
-    "mutsea-network",
+    "mutsea-network", 
     "mutsea-assets",
     "mutsea-regions",
     "mutsea-users",
