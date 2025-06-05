@@ -1,5 +1,5 @@
-//! mutsea-network/src/lludp_server/handler_packet.rs
-//! Main packet dispatch and routing
+//! mutsea-network/src/lludp_server/handlers.rs
+//! Combined packet handlers for LLUDP server
 
 use crate::NetworkResult;
 use mutsea_core::config::LLUDPConfig;
@@ -13,24 +13,21 @@ use tracing::{debug, error, warn};
 
 use super::{
     CircuitInfo, ServerStats, AuthHandler, MovementHandler, 
-    ChatHandler, PingHandler, RegionHandler, ObjectHandler,
-    AnimationHandler, TeleportHandler
+    ChatHandler, PingHandler, RegionHandler
 };
 
-/// Main packet handler that routes packets to specialized handlers
+/// Combined packet handlers that route packets to specialized handlers
 #[derive(Clone)]
-pub struct PacketHandler {
+pub struct PacketHandlers {
     auth_handler: AuthHandler,
     movement_handler: MovementHandler,
     chat_handler: ChatHandler,
     ping_handler: PingHandler,
     region_handler: RegionHandler,
-    object_handler: ObjectHandler,
-    animation_handler: AnimationHandler,
-    teleport_handler: TeleportHandler,
 }
 
-impl PacketHandler {
+impl PacketHandlers {
+    /// Create new packet handlers
     pub fn new() -> Self {
         Self {
             auth_handler: AuthHandler::new(),
@@ -38,15 +35,13 @@ impl PacketHandler {
             chat_handler: ChatHandler::new(),
             ping_handler: PingHandler::new(),
             region_handler: RegionHandler::new(),
-            object_handler: ObjectHandler::new(),
-            animation_handler: AnimationHandler::new(),
-            teleport_handler: TeleportHandler::new(),
         }
     }
 
     /// Main packet handling dispatch
     pub async fn handle_packet(
         &self,
+        session_manager: &crate::SessionManager,
         circuits: &Arc<RwLock<HashMap<u32, CircuitInfo>>>,
         socket: &UdpSocket,
         addr: SocketAddr,
@@ -135,35 +130,12 @@ impl PacketHandler {
                 ).await?;
             }
 
-            // Teleport messages
-            packet_types::TELEPORT_REQUEST => {
-                self.teleport_handler.handle_teleport_request(
-                    circuits, socket, addr, packet
-                ).await?;
-            }
-            packet_types::TELEPORT_LOCAL => {
-                self.teleport_handler.handle_teleport_local(
-                    circuits, socket, addr, packet
-                ).await?;
-            }
-
             // Object messages
             packet_types::OBJECT_SELECT => {
-                self.object_handler.handle_object_select(circuits, socket, addr, packet).await?;
+                self.handle_object_select(circuits, socket, addr, packet).await?;
             }
             packet_types::OBJECT_DESELECT => {
                 self.handle_object_deselect(circuits, addr, packet).await?;
-            }
-            packet_types::OBJECT_GRAB => {
-                self.handle_object_grab(circuits, addr, packet).await?;
-            }
-            packet_types::OBJECT_DROP => {
-                self.handle_object_drop(circuits, addr, packet).await?;
-            }
-
-            // Animation messages
-            packet_types::AGENT_ANIMATION => {
-                self.animation_handler.handle_agent_animation(circuits, addr, packet).await?;
             }
 
             // Asset messages
@@ -172,6 +144,18 @@ impl PacketHandler {
             }
             packet_types::TRANSFER_REQUEST => {
                 self.handle_transfer_request(circuits, socket, addr, packet).await?;
+            }
+
+            // Animation messages
+            packet_types::AGENT_ANIMATION => {
+                self.handle_agent_animation(circuits, addr, packet).await?;
+            }
+
+            // Teleport messages
+            packet_types::TELEPORT_REQUEST => {
+                self.region_handler.handle_teleport_request(
+                    circuits, socket, addr, packet
+                ).await?;
             }
 
             // Inventory messages
@@ -319,6 +303,29 @@ impl PacketHandler {
         Ok(())
     }
 
+    /// Handle object selection
+    async fn handle_object_select(
+        &self,
+        circuits: &Arc<RwLock<HashMap<u32, CircuitInfo>>>,
+        socket: &UdpSocket,
+        addr: SocketAddr,
+        packet: &Packet,
+    ) -> NetworkResult<()> {
+        debug!("ObjectSelect from {}", addr);
+
+        // Find circuit and update activity
+        let mut circuits_guard = circuits.write().await;
+        for circuit in circuits_guard.values_mut() {
+            if circuit.address == addr {
+                circuit.last_activity = std::time::Instant::now();
+                break;
+            }
+        }
+
+        // TODO: Parse object selection and send object properties
+        Ok(())
+    }
+
     /// Handle object deselection
     async fn handle_object_deselect(
         &self,
@@ -340,14 +347,14 @@ impl PacketHandler {
         Ok(())
     }
 
-    /// Handle object grab
-    async fn handle_object_grab(
+    /// Handle agent animation
+    async fn handle_agent_animation(
         &self,
         circuits: &Arc<RwLock<HashMap<u32, CircuitInfo>>>,
         addr: SocketAddr,
         packet: &Packet,
     ) -> NetworkResult<()> {
-        debug!("ObjectGrab from {}", addr);
+        debug!("AgentAnimation from {}", addr);
 
         // Update circuit activity
         let mut circuits_guard = circuits.write().await;
@@ -358,27 +365,7 @@ impl PacketHandler {
             }
         }
 
-        Ok(())
-    }
-
-    /// Handle object drop
-    async fn handle_object_drop(
-        &self,
-        circuits: &Arc<RwLock<HashMap<u32, CircuitInfo>>>,
-        addr: SocketAddr,
-        packet: &Packet,
-    ) -> NetworkResult<()> {
-        debug!("ObjectDrop from {}", addr);
-
-        // Update circuit activity
-        let mut circuits_guard = circuits.write().await;
-        for circuit in circuits_guard.values_mut() {
-            if circuit.address == addr {
-                circuit.last_activity = std::time::Instant::now();
-                break;
-            }
-        }
-
+        // TODO: Parse animation data and broadcast to nearby agents
         Ok(())
     }
 
@@ -619,7 +606,7 @@ pub struct HandlerStats {
     pub region_operations: u64,
 }
 
-impl Default for PacketHandler {
+impl Default for PacketHandlers {
     fn default() -> Self {
         Self::new()
     }

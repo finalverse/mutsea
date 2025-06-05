@@ -2,33 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-ai-content" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-ai-core" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-ai-nlp" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-ai-social" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-asset-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-assets" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-benchmarks" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-cache" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-cli" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-compatibility" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-config" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-core" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-database" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-examples" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-grid-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-logging" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-messaging" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-monitoring" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-network" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-opensim-bridge" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-physics" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-protocol" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-regions" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-tests" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-tools" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-user-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mutsea-users" vcs="Git" />
   </component>
 </project>

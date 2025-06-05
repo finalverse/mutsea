@@ -159,6 +159,17 @@ pub mod packet_types {
     pub const AI_AGENT_BEHAVIOR: u32 = 0x8004;
     pub const WORLD_GENERATION_REQUEST: u32 = 0x8005;
     pub const WORLD_GENERATION_REPLY: u32 = 0x8006;
+
+    // additional package types
+    pub const LAYER_DATA: u32 = 23;
+    pub const SIMULATOR_FEATURES: u32 = 24;
+    pub const CLOUD_DATA: u32 = 25;
+    pub const SIMULATOR_SHUTDOWN: u32 = 26;
+    pub const OBJECT_PROPERTIES: u32 = 27;
+    pub const IMPROVED_TERSE_OBJECT_UPDATE: u32 = 28;
+    pub const AGENT_MOVEMENT_COMPLETE: u32 = 249;
+    pub const IMAGE_NOT_IN_DATABASE: u32 = 29;
+    pub const INVENTORY_DESCENDENTS: u32 = 30;
 }
 
 /// Chat types

@@ -92,7 +92,18 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94ff4938-59e3-41ae-ad94-8bfa5be4d9fb" name="Changes" comment="" />
+    <list default="true" id="94ff4938-59e3-41ae-ad94-8bfa5be4d9fb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server/circuit.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/lludp_server/circuit.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_object.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_object.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_packet.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_packet.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_teleport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/lludp_server/handler_teleport.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-network/src/lludp_server/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-network/src/lludp_server/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutsea-protocol/src/constants.rs" beforeDir="false" afterPath="$PROJECT_DIR$/mutsea-protocol/src/constants.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,6 +151,7 @@
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
     "org.rust.first.attach.projects": "true",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -215,7 +227,9 @@
       <updated>1748712384380</updated>
       <workItem from="1748712385740" duration="3859000" />
       <workItem from="1748813300653" duration="19742000" />
-      <workItem from="1749024062607" duration="18065000" />
+      <workItem from="1749024062607" duration="20865000" />
+      <workItem from="1749112475940" duration="751000" />
+      <workItem from="1749139974770" duration="1595000" />
     </task>
     <servers />
   </component>
@@ -232,6 +246,38 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/mutsea-ai-content" />
+      <path value="$PROJECT_DIR$/mutsea-ai-core" />
+      <path value="$PROJECT_DIR$/mutsea-ai-nlp" />
+      <path value="$PROJECT_DIR$/mutsea-ai-social" />
+      <path value="$PROJECT_DIR$/mutsea-asset-server" />
+      <path value="$PROJECT_DIR$/mutsea-assets" />
+      <path value="$PROJECT_DIR$/mutsea-benchmarks" />
+      <path value="$PROJECT_DIR$/mutsea-cache" />
+      <path value="$PROJECT_DIR$/mutsea-cli" />
+      <path value="$PROJECT_DIR$/mutsea-compatibility" />
+      <path value="$PROJECT_DIR$/mutsea-config" />
+      <path value="$PROJECT_DIR$/mutsea-core" />
+      <path value="$PROJECT_DIR$/mutsea-database" />
+      <path value="$PROJECT_DIR$/mutsea-examples" />
+      <path value="$PROJECT_DIR$/mutsea-grid-server" />
+      <path value="$PROJECT_DIR$/mutsea-logging" />
+      <path value="$PROJECT_DIR$/mutsea-messaging" />
+      <path value="$PROJECT_DIR$/mutsea-monitoring" />
+      <path value="$PROJECT_DIR$/mutsea-network" />
+      <path value="$PROJECT_DIR$/mutsea-opensim-bridge" />
+      <path value="$PROJECT_DIR$/mutsea-physics" />
+      <path value="$PROJECT_DIR$/mutsea-protocol" />
+      <path value="$PROJECT_DIR$/mutsea-regions" />
+      <path value="$PROJECT_DIR$/mutsea-server" />
+      <path value="$PROJECT_DIR$/mutsea-tests" />
+      <path value="$PROJECT_DIR$/mutsea-tools" />
+      <path value="$PROJECT_DIR$/mutsea-user-server" />
+      <path value="$PROJECT_DIR$/mutsea-users" />
+    </ignored-roots>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

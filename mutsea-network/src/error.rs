@@ -1,4 +1,4 @@
-//! Network error types
+//! Update mutsea-network/src/error.rs
 
 use thiserror::Error;
 
@@ -56,6 +56,32 @@ pub enum NetworkError {
     /// Generic network error
     #[error("{0}")]
     Generic(String),
+}
+
+// Add conversion from MutseaError
+impl From<mutsea_core::MutseaError> for NetworkError {
+    fn from(err: mutsea_core::MutseaError) -> Self {
+        match err {
+            mutsea_core::MutseaError::Network(msg) => NetworkError::Generic(msg),
+            mutsea_core::MutseaError::Authentication(msg) => NetworkError::AuthenticationFailed(msg),
+            mutsea_core::MutseaError::Authorization(msg) => NetworkError::AuthorizationFailed(msg),
+            _ => NetworkError::Generic(err.to_string()),
+        }
+    }
+}
+
+// Add conversion from ProtocolError
+impl From<mutsea_protocol::ProtocolError> for NetworkError {
+    fn from(err: mutsea_protocol::ProtocolError) -> Self {
+        match err {
+            mutsea_protocol::ProtocolError::InvalidPacket(msg) => NetworkError::InvalidPacket(msg),
+            mutsea_protocol::ProtocolError::AuthenticationFailed(msg) => NetworkError::AuthenticationFailed(msg),
+            mutsea_protocol::ProtocolError::Timeout(msg) => NetworkError::Timeout(msg),
+            mutsea_protocol::ProtocolError::Encoding(msg) => NetworkError::Serialization(msg),
+            mutsea_protocol::ProtocolError::Decoding(msg) => NetworkError::Serialization(msg),
+            _ => NetworkError::Protocol(err.to_string()),
+        }
+    }
 }
 
 /// Result type for network operations

@@ -1,5 +1,4 @@
-//! mutsea-network/src/lludp_server/circuit.rs
-//! Circuit management and information
+//! Update mutsea-network/src/lludp_server/circuit.rs
 
 use mutsea_core::{UserId, RegionId, Vector3, Quaternion};
 use std::collections::HashMap;
@@ -27,6 +26,9 @@ pub struct CircuitInfo {
     pub position: Vector3,
     pub look_at: Vector3,
     pub client_info: Option<ClientInfo>,
+    // Add missing ping fields
+    pub last_ping_id: u8,
+    pub last_ping_time: Instant,
 }
 
 /// Client information
