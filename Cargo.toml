@@ -1,53 +1,58 @@
 [workspace]
 resolver = "2"
 members = [
-    # Core Components
+    # === CORE FOUNDATION ===
     "mutsea-core",
-    "mutsea-network", 
-    "mutsea-assets",
-    "mutsea-regions",
-    "mutsea-users",
-    "mutsea-physics",
+    "mutsea-config", 
+    "mutsea-logging",
     
-    # OpenSim Compatibility
-    "mutsea-compatibility",
-    "mutsea-opensim-bridge",
-    "mutsea-protocol",
+    # === NETWORK & PROTOCOL LAYER ===
+    "mutsea-network",           # Network abstractions & HTTP
+    "mutsea-lludp-server",      # Dedicated LLUDP server (extracted)
+    "mutsea-protocol",          # Protocol definitions
     
-    # AI Components (Phase II)
-    "mutsea-ai-core",
-    "mutsea-ai-content",
-    "mutsea-ai-social",
-    "mutsea-ai-nlp",
-    
-    # Services
+    # === DATA LAYER ===
     "mutsea-database",
     "mutsea-cache",
     "mutsea-messaging",
-    "mutsea-monitoring",
     
-    # Tools and Utilities
+    # === SERVICE LAYER ===
+    "mutsea-assets",
+    "mutsea-users", 
+    "mutsea-regions",
+    "mutsea-physics",
+    
+    # === AI LAYER (Phase II) ===
+    "mutsea-ai-core",
+    "mutsea-ai-content",
+    "mutsea-ai-social", 
+    "mutsea-ai-nlp",
+    
+    # === COMPATIBILITY LAYER ===
+    "mutsea-compatibility",
+    "mutsea-opensim-bridge",
+    
+    # === APPLICATION LAYER ===
+    "mutsea-server",            # Main application server
+    "mutsea-grid-server",       # Grid services
+    "mutsea-asset-server",      # Dedicated asset server
+    "mutsea-user-server",       # User management server
+    
+    # === TOOLS & UTILITIES ===
     "mutsea-cli",
     "mutsea-tools",
-    "mutsea-config",
-    "mutsea-logging",
+    "mutsea-monitoring",
     
-    # Server Applications
-    "mutsea-server",
-    "mutsea-grid-server",
-    "mutsea-asset-server",
-    "mutsea-user-server",
-    
-    # Testing and Examples
+    # === TESTING & EXAMPLES ===
     "mutsea-tests",
-    "mutsea-examples",
+    "mutsea-examples", 
     "mutsea-benchmarks",
 ]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-authors = ["Finalverse Team <team@finalverse.io>"]
+authors = ["Finalverse Team <info@finalverse.com>"]
 license = "Apache-2.0"
 homepage = "https://github.com/finalverse/mutsea"
 repository = "https://github.com/finalverse/mutsea"

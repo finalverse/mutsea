@@ -1,0 +1,32 @@
+# mutsea-lludp-server/Cargo.toml
+[package]
+name = "mutsea-lludp-server"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description = "High-performance LLUDP server for OpenSim compatibility"
+
+[dependencies]
+mutsea-core = { path = "../mutsea-core" }
+mutsea-protocol = { path = "../mutsea-protocol" }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+bincode = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+bytes = "1.5"
+async-trait = { workspace = true }
+rand = { workspace = true }
+chrono = { workspace = true }
+
+[features]
+default = ["metrics"]
+metrics = ["mutsea-core/metrics"]
+ai-integration = ["mutsea-core/ai"]
