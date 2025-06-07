@@ -3,6 +3,7 @@
 
 use crate::{
     backends::{DatabasePool, DatabaseBackend},
+    error::DatabaseResult,
     Result, DatabaseError,
 };
 use std::sync::Arc;
@@ -69,50 +70,9 @@ impl DatabaseManager {
 
     /// Initialize AI-specific database schema
     pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
-
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
-        }
-
-        let sql_files = [
-            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
-            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
-            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
-            include_str!("../migrations/postgresql/ai/learning_data.sql"),
-            include_str!("../migrations/postgresql/ai/npc_states.sql"),
-        ];
-
-        for sql in sql_files.iter() {
-            self.pool.execute_raw(sql).await?;
-        }
-
-        info!("AI schema initialization completed");
-        Ok(())
-    }
-
-    /// Initialize AI-specific database schema
-    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
-
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
-        }
-
-        let sql_files = [
-            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
-            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
-            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
-            include_str!("../migrations/postgresql/ai/learning_data.sql"),
-            include_str!("../migrations/postgresql/ai/npc_states.sql"),
-        ];
-
-        for sql in sql_files.iter() {
-            self.pool.execute_raw(sql).await?;
-        }
-
-        info!("AI schema initialization completed");
-        Ok(())
+        let backend = self.backend_type();
+        info!("Initializing AI database schema for {} backend", backend.as_str());
+        backend.initialize_ai_schema(&self.pool).await
     }
 
     /// Get database metrics

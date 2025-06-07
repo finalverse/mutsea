@@ -45,3 +45,6 @@ impl From<serde_json::Error> for DatabaseError {
         DatabaseError::Serialization(err.to_string())
     }
 }
+
+/// Result type used throughout the database layer
+pub type DatabaseResult<T> = std::result::Result<T, DatabaseError>;

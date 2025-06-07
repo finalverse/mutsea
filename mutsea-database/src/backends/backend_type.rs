@@ -78,4 +78,30 @@ impl DatabaseBackend {
             DatabaseBackend::SQLite => (1, 1), // SQLite should use minimal connections
         }
     }
+
+    /// Initialize AI-specific schema for this backend
+    pub async fn initialize_ai_schema(&self, pool: &super::pool::DatabasePool) -> DatabaseResult<()> {
+        match self {
+            DatabaseBackend::PostgreSQL => {
+                let sql_files = [
+                    include_str!("../../migrations/postgresql/ai/ai_decisions.sql"),
+                    include_str!("../../migrations/postgresql/ai/ai_global_mind_state.sql"),
+                    include_str!("../../migrations/postgresql/ai/emergent_behaviors.sql"),
+                    include_str!("../../migrations/postgresql/ai/learning_data.sql"),
+                    include_str!("../../migrations/postgresql/ai/npc_states.sql"),
+                ];
+
+                for sql in sql_files.iter() {
+                    pool.execute_raw(sql).await?;
+                }
+
+                Ok(())
+            }
+            DatabaseBackend::MySQL | DatabaseBackend::SQLite => {
+                // AI schema migrations are not implemented for these backends yet
+                Ok(())
+            }
+        }
+    }
 }
+
