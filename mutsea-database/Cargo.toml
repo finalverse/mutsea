@@ -48,7 +48,7 @@ tokio-test = "0.4"
 tracing-subscriber = { workspace = true }
 
 [features]
-default = ["postgresql", "opensim-compat"]
+default = ["postgresql", "sqlite", "opensim-compat"]
 postgresql = []
 mysql = []
 sqlite = []

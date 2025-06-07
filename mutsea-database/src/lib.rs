@@ -77,7 +77,7 @@ impl MutseaDatabase {
 
 // Re-exports for convenience
 pub use backends::{BackendType, DatabasePool};
-pub use error::DatabaseError;
+pub use error::{DatabaseError, DatabaseResult};
 pub use manager::DatabaseManager;
 pub use metrics::DatabaseMetrics;
 
