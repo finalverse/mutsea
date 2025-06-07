@@ -16,15 +16,20 @@ pub struct DatabaseManager {
 impl DatabaseManager {
     /// Create a new database manager
     pub async fn new(database_url: &str) -> Result<Self> {
-        info!("Initializing database manager with URL: {}", 
+        info!("Initializing database manager with URL: {}",
               database_url.split('@').last().unwrap_or("unknown"));
-        
+
         let pool = DatabasePool::new(database_url).await?;
         info!("Database pool created successfully");
-        
-        Ok(Self { 
-            pool: Arc::new(pool) 
+
+        Ok(Self {
+            pool: Arc::new(pool)
         })
+    }
+
+    /// Run database migrations
+    pub async fn migrate(&self) -> crate::DatabaseResult<()> {
+        self.pool.migrate().await
     }
     
     /// Get a database backend instance
@@ -69,34 +74,10 @@ impl DatabaseManager {
 
     /// Initialize AI-specific database schema
     pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
+        info!("Initializing AI database schema for {:?} backend", self.backend_type());
 
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
-        }
-
-        let sql_files = [
-            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
-            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
-            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
-            include_str!("../migrations/postgresql/ai/learning_data.sql"),
-            include_str!("../migrations/postgresql/ai/npc_states.sql"),
-        ];
-
-        for sql in sql_files.iter() {
-            self.pool.execute_raw(sql).await?;
-        }
-
-        info!("AI schema initialization completed");
-        Ok(())
-    }
-
-    /// Initialize AI-specific database schema
-    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
-
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
+        if self.backend_type() != DatabaseBackend::PostgreSQL {
+            return Err(DatabaseError::UnsupportedBackend(self.backend_type().as_str().to_string()));
         }
 
         let sql_files = [
