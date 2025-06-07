@@ -7,6 +7,7 @@
 pub mod error;
 pub mod backends;
 pub mod manager;
+pub mod metrics;
 pub mod utils;
 
 // OpenSim Compatibility Layer
@@ -72,18 +73,13 @@ impl MutseaDatabase {
         self.manager.verify_opensim_tables().await
     }
 
-    /// Initialize AI-enhanced tables (for future use)
-    pub async fn initialize_ai_schema(&self) -> Result<()> {
-        // TODO: Implement AI-specific table creation
-        tracing::info!("AI schema initialization not yet implemented");
-        Ok(())
-    }
 }
 
 // Re-exports for convenience
 pub use backends::{BackendType, DatabasePool};
 pub use error::DatabaseError;
 pub use manager::DatabaseManager;
+pub use metrics::DatabaseMetrics;
 
 #[cfg(feature = "opensim-compat")]
 pub use opensim::{schema, models};

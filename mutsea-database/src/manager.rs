@@ -2,12 +2,16 @@
 //! Database manager for coordinating operations
 
 use crate::{
-    backends::{DatabaseBackend, DatabasePool},
+    backends::{DatabasePool, DatabaseBackend},
+    error::DatabaseResult,
     Result, DatabaseError,
+    metrics::DatabaseMetrics,
 };
+
 use std::sync::{atomic::{AtomicU64, Ordering}, Arc};
 use tracing::{debug, error, info};
 use std::time::Duration;
+use tokio::sync::RwLock;
 
 /// Database manager for coordinating operations across different backends
 pub struct DatabaseManager {
@@ -16,6 +20,7 @@ pub struct DatabaseManager {
     successful_queries: AtomicU64,
     failed_queries: AtomicU64,
     avg_query_time_ms: AtomicU64,
+    metrics: Arc<RwLock<DatabaseMetrics>>, 
 }
 
 impl DatabaseManager {
@@ -33,6 +38,7 @@ impl DatabaseManager {
             successful_queries: AtomicU64::new(0),
             failed_queries: AtomicU64::new(0),
             avg_query_time_ms: AtomicU64::new(0),
+            metrics: Arc::new(RwLock::new(DatabaseMetrics::default())),
         })
     }
     
@@ -78,50 +84,9 @@ impl DatabaseManager {
 
     /// Initialize AI-specific database schema
     pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
-
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
-        }
-
-        let sql_files = [
-            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
-            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
-            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
-            include_str!("../migrations/postgresql/ai/learning_data.sql"),
-            include_str!("../migrations/postgresql/ai/npc_states.sql"),
-        ];
-
-        for sql in sql_files.iter() {
-            self.pool.execute_raw(sql).await?;
-        }
-
-        info!("AI schema initialization completed");
-        Ok(())
-    }
-
-    /// Initialize AI-specific database schema
-    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
-        info!("Initializing AI database schema for {} backend", self.backend.as_str());
-
-        if self.backend != DatabaseBackend::PostgreSQL {
-            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
-        }
-
-        let sql_files = [
-            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
-            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
-            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
-            include_str!("../migrations/postgresql/ai/learning_data.sql"),
-            include_str!("../migrations/postgresql/ai/npc_states.sql"),
-        ];
-
-        for sql in sql_files.iter() {
-            self.pool.execute_raw(sql).await?;
-        }
-
-        info!("AI schema initialization completed");
-        Ok(())
+        let backend = self.backend_type();
+        info!("Initializing AI database schema for {} backend", backend.as_str());
+        backend.initialize_ai_schema(&self.pool).await
     }
 
     /// Get database metrics
