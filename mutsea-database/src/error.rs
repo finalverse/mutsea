@@ -46,5 +46,5 @@ impl From<serde_json::Error> for DatabaseError {
     }
 }
 
-/// Convenient result type for database operations
+/// Result type used throughout the database layer
 pub type DatabaseResult<T> = std::result::Result<T, DatabaseError>;

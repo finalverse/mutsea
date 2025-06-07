@@ -56,8 +56,10 @@ opensim-compat = []
 
 [[example]]
 name = "opensim_basic"
+path = "examples/opensim_integration.rs"
 required-features = ["opensim-compat"]
 
 [[example]]
 name = "database_setup"
+path = "examples/quick_setup.rs"
 required-features = ["postgresql"]

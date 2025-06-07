@@ -3,14 +3,24 @@
 
 use crate::{
     backends::{DatabasePool, DatabaseBackend},
+    error::DatabaseResult,
     Result, DatabaseError,
+    metrics::DatabaseMetrics,
 };
-use std::sync::Arc;
-use tracing::{info, debug, error};
+
+use std::sync::{atomic::{AtomicU64, Ordering}, Arc};
+use tracing::{debug, error, info};
+use std::time::Duration;
+use tokio::sync::RwLock;
 
 /// Database manager for coordinating operations across different backends
 pub struct DatabaseManager {
     pool: Arc<DatabasePool>,
+    total_queries: AtomicU64,
+    successful_queries: AtomicU64,
+    failed_queries: AtomicU64,
+    avg_query_time_ms: AtomicU64,
+    metrics: Arc<RwLock<DatabaseMetrics>>, 
 }
 
 impl DatabaseManager {
@@ -21,9 +31,14 @@ impl DatabaseManager {
 
         let pool = DatabasePool::new(database_url).await?;
         info!("Database pool created successfully");
-
+        
         Ok(Self {
-            pool: Arc::new(pool)
+            pool: Arc::new(pool),
+            total_queries: AtomicU64::new(0),
+            successful_queries: AtomicU64::new(0),
+            failed_queries: AtomicU64::new(0),
+            avg_query_time_ms: AtomicU64::new(0),
+            metrics: Arc::new(RwLock::new(DatabaseMetrics::default())),
         })
     }
 
@@ -98,40 +113,47 @@ impl DatabaseManager {
 
     /// Get database metrics
     pub async fn get_metrics(&self) -> DatabaseMetrics {
-        let mut metrics = self.metrics.read().await.clone();
-        
+        let mut metrics = DatabaseMetrics {
+            total_queries: self.total_queries.load(Ordering::Relaxed),
+            successful_queries: self.successful_queries.load(Ordering::Relaxed),
+            failed_queries: self.failed_queries.load(Ordering::Relaxed),
+            avg_query_time_ms: f64::from_bits(self.avg_query_time_ms.load(Ordering::Relaxed)),
+            active_connections: 0,
+            max_connections: 0,
+        };
+
         // Update connection pool metrics
         self.pool.update_metrics(&mut metrics).await;
-        
+
         metrics
     }
 
     /// Try to get database metrics (non-blocking)
     pub async fn try_get_metrics(&self) -> DatabaseResult<DatabaseMetrics> {
-        let metrics = self.metrics.try_read()
-            .map_err(|_| DatabaseError::Generic("Failed to acquire metrics lock".to_string()))?
-            .clone();
-        Ok(metrics)
+        Ok(self.get_metrics().await)
     }
 
     /// Update metrics after query execution
     async fn update_metrics(&self, success: bool, duration: Duration) {
-        let mut metrics = self.metrics.write().await;
-        metrics.total_queries += 1;
-        
+        self.total_queries.fetch_add(1, Ordering::Relaxed);
         if success {
-            metrics.successful_queries += 1;
+            self.successful_queries.fetch_add(1, Ordering::Relaxed);
         } else {
-            metrics.failed_queries += 1;
+            self.failed_queries.fetch_add(1, Ordering::Relaxed);
         }
 
-        // Update average query time (exponential moving average)
         let duration_ms = duration.as_millis() as f64;
-        if metrics.total_queries == 1 {
-            metrics.avg_query_time_ms = duration_ms;
-        } else {
-            metrics.avg_query_time_ms = (metrics.avg_query_time_ms * 0.9) + (duration_ms * 0.1);
-        }
+
+        self.avg_query_time_ms.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |current| {
+            let current = f64::from_bits(current);
+            let total = self.total_queries.load(Ordering::Relaxed);
+            let new_avg = if total == 1 {
+                duration_ms
+            } else {
+                current * 0.9 + duration_ms * 0.1
+            };
+            Some(new_avg.to_bits())
+        }).ok();
     }
 
     /// Execute a query with metrics tracking
@@ -269,6 +291,17 @@ pub struct OpenSimHealth {
     pub region_count: u64,
     pub user_count: u64,
     pub asset_count: u64,
+}
+
+/// Basic database metrics
+#[derive(Debug, Clone, Default)]
+pub struct DatabaseMetrics {
+    pub total_queries: u64,
+    pub successful_queries: u64,
+    pub failed_queries: u64,
+    pub avg_query_time_ms: f64,
+    pub active_connections: u32,
+    pub max_connections: u32,
 }
 
 #[cfg(test)]
