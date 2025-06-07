@@ -1,12 +1,63 @@
+# /Users/wenyan/mutsea/mutsea/mutsea-database/Cargo.toml
+
 [package]
 name = "mutsea-database"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-license.workspace = true
-homepage.workspace = true
-repository.workspace = true
-keywords.workspace = true
-categories.workspace = true
+version = "0.1.0"
+edition = "2021"
+authors = ["Mutsea Team"]
+description = "Database layer for Mutsea AI-driven world engine with OpenSim compatibility"
 
 [dependencies]
+# Async runtime
+tokio = { workspace = true }
+async-trait = "0.1"
+
+# Database drivers
+sqlx = { version = "0.7", features = [
+    "runtime-tokio-rustls",
+    "postgres", 
+    "mysql",
+    "sqlite",
+    "chrono",
+    "uuid",
+    "json"
+] }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+hex = "0.4"
+
+# Logging
+tracing = { workspace = true }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Internal dependencies
+mutsea-core = { path = "../mutsea-core" }
+mutsea-config = { path = "../mutsea-config" }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tracing-subscriber = { workspace = true }
+
+[features]
+default = ["postgresql", "opensim-compat"]
+postgresql = []
+mysql = []
+sqlite = []
+opensim-compat = []
+
+[[example]]
+name = "opensim_basic"
+required-features = ["opensim-compat"]
+
+[[example]]
+name = "database_setup"
+required-features = ["postgresql"]
