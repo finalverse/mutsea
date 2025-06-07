@@ -60,6 +60,11 @@ impl DatabaseService {
         self.manager.migrate().await
     }
 
+    /// Initialize AI-specific schema
+    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
+        self.manager.initialize_ai_schema().await
+    }
+
     /// Get database metrics
     pub async fn get_metrics(&self) -> DatabaseMetrics {
         self.manager.get_metrics().await
