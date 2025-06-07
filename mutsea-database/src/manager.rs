@@ -4,13 +4,16 @@
 use crate::{
     backends::{DatabasePool, DatabaseBackend},
     Result, DatabaseError,
+    metrics::DatabaseMetrics,
 };
 use std::sync::Arc;
+use tokio::sync::RwLock;
 use tracing::{info, debug, error};
 
 /// Database manager for coordinating operations across different backends
 pub struct DatabaseManager {
     pool: Arc<DatabasePool>,
+    metrics: Arc<RwLock<DatabaseMetrics>>, 
 }
 
 impl DatabaseManager {
@@ -22,8 +25,9 @@ impl DatabaseManager {
         let pool = DatabasePool::new(database_url).await?;
         info!("Database pool created successfully");
         
-        Ok(Self { 
-            pool: Arc::new(pool) 
+        Ok(Self {
+            pool: Arc::new(pool),
+            metrics: Arc::new(RwLock::new(DatabaseMetrics::default())),
         })
     }
     
