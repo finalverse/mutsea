@@ -46,10 +46,24 @@ impl MutseaDatabase {
         &self.manager
     }
 
-    /// Initialize OpenSim compatible tables
-    #[cfg(feature = "opensim-compat")]
-    pub async fn initialize_opensim_schema(&self) -> Result<()> {
-        self.manager.initialize_opensim_tables().await
+    /// Get clone of the database manager
+    pub fn manager_clone(&self) -> Arc<DatabaseManager> {
+        Arc::clone(&self.manager)
+    }
+
+    /// Run database migrations
+    pub async fn migrate(&self) -> DatabaseResult<()> {
+        self.manager.migrate().await
+    }
+
+    /// Initialize AI-specific schema
+    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
+        self.manager.initialize_ai_schema().await
+    }
+
+    /// Get database metrics
+    pub async fn get_metrics(&self) -> DatabaseMetrics {
+        self.manager.get_metrics().await
     }
 
     /// Check if database is ready for OpenSim operations

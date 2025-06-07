@@ -66,47 +66,110 @@ impl DatabaseManager {
             // TODO: Add more meaningful statistics
         })
     }
-}
 
-/// Database statistics structure
-#[derive(Debug, Clone)]
-pub struct DatabaseStats {
-    pub backend_type: crate::backends::BackendType,
-    pub is_connected: bool,
-}
+    /// Initialize AI-specific database schema
+    pub async fn initialize_ai_schema(&self) -> DatabaseResult<()> {
+        info!("Initializing AI database schema for {} backend", self.backend.as_str());
 
-// OpenSim-specific operations
-#[cfg(feature = "opensim-compat")]
-impl DatabaseManager {
-    /// Initialize OpenSim compatible database tables
-    pub async fn initialize_opensim_tables(&self) -> Result<()> {
-        info!("Initializing OpenSim compatible database schema");
-        let backend = self.get_backend().await?;
-        
-        // List of SQL files to execute for OpenSim setup
-        let sql_files = vec![
-            ("regions", include_str!("sql/opensim/create_regions.sql")),
-            ("user_accounts", include_str!("sql/opensim/create_users.sql")),
-            ("assets", include_str!("sql/opensim/create_assets.sql")),
-            ("inventory", include_str!("sql/opensim/create_inventory.sql")),
-            ("primitives", include_str!("sql/opensim/create_primitives.sql")),
-            ("terrain", include_str!("sql/opensim/create_terrain.sql")),
-            ("parcels", include_str!("sql/opensim/create_parcels.sql")),
-        ];
-
-        for (table_name, sql) in sql_files {
-            debug!("Creating table: {}", table_name);
-            match backend.execute(sql, &[]).await {
-                Ok(_) => info!("Table '{}' created successfully", table_name),
-                Err(e) => {
-                    // Log but continue - table might already exist
-                    debug!("Table '{}' creation result: {}", table_name, e);
-                }
-            }
+        if self.backend != DatabaseBackend::PostgreSQL {
+            return Err(DatabaseError::UnsupportedBackend(self.backend.as_str().to_string()));
         }
 
-        info!("OpenSim schema initialization completed");
+        let sql_files = [
+            include_str!("../migrations/postgresql/ai/ai_decisions.sql"),
+            include_str!("../migrations/postgresql/ai/ai_global_mind_state.sql"),
+            include_str!("../migrations/postgresql/ai/emergent_behaviors.sql"),
+            include_str!("../migrations/postgresql/ai/learning_data.sql"),
+            include_str!("../migrations/postgresql/ai/npc_states.sql"),
+        ];
+
+        for sql in sql_files.iter() {
+            self.pool.execute_raw(sql).await?;
+        }
+
+        info!("AI schema initialization completed");
         Ok(())
+    }
+
+    /// Get database metrics
+    pub async fn get_metrics(&self) -> DatabaseMetrics {
+        let mut metrics = self.metrics.read().await.clone();
+        
+        // Update connection pool metrics
+        self.pool.update_metrics(&mut metrics).await;
+        
+        metrics
+    }
+
+    /// Try to get database metrics (non-blocking)
+    pub async fn try_get_metrics(&self) -> DatabaseResult<DatabaseMetrics> {
+        let metrics = self.metrics.try_read()
+            .map_err(|_| DatabaseError::Generic("Failed to acquire metrics lock".to_string()))?
+            .clone();
+        Ok(metrics)
+    }
+
+    /// Update metrics after query execution
+    async fn update_metrics(&self, success: bool, duration: Duration) {
+        let mut metrics = self.metrics.write().await;
+        metrics.total_queries += 1;
+        
+        if success {
+            metrics.successful_queries += 1;
+        } else {
+            metrics.failed_queries += 1;
+        }
+
+        // Update average query time (exponential moving average)
+        let duration_ms = duration.as_millis() as f64;
+        if metrics.total_queries == 1 {
+            metrics.avg_query_time_ms = duration_ms;
+        } else {
+            metrics.avg_query_time_ms = (metrics.avg_query_time_ms * 0.9) + (duration_ms * 0.1);
+        }
+    }
+
+    /// Execute a query with metrics tracking
+    async fn execute_with_metrics<F, T>(&self, operation: F) -> DatabaseResult<T>
+    where
+        F: std::future::Future<Output = DatabaseResult<T>>,
+    {
+        let start = std::time::Instant::now();
+        let result = operation.await;
+        let duration = start.elapsed();
+        
+        self.update_metrics(result.is_ok(), duration).await;
+        result
+    }
+
+    // === USER MANAGEMENT ===
+
+    /// Create a new user
+    pub async fn create_user(&self, account: &UserAccount) -> DatabaseResult<()> {
+        self.execute_with_metrics(async {
+            self.user_queries.create(&self.pool, account).await
+        }).await
+    }
+
+    /// Get user by ID
+    pub async fn get_user(&self, user_id: UserId) -> DatabaseResult<Option<UserAccount>> {
+        self.execute_with_metrics(async {
+            self.user_queries.get_by_id(&self.pool, user_id).await
+        }).await
+    }
+
+    /// Find user by name
+    pub async fn find_user_by_name(&self, first_name: &str, last_name: &str) -> DatabaseResult<Option<UserAccount>> {
+        self.execute_with_metrics(async {
+            self.user_queries.find_by_name(&self.pool, first_name, last_name).await
+        }).await
+    }
+
+    /// Update user
+    pub async fn update_user(&self, account: &UserAccount) -> DatabaseResult<()> {
+        self.execute_with_metrics(async {
+            self.user_queries.update(&self.pool, account).await
+        }).await
     }
 
     /// Verify OpenSim tables exist and are properly structured
