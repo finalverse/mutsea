@@ -4,6 +4,7 @@
 use clap::{Parser, Subcommand};
 use mutsea_core::{config::MutseaConfig, UserAccount, UserId};
 use mutsea_protocol::login::OpenSimLoginService;
+use mutsea_database::{DatabaseService, error::DatabaseError};
 use std::path::PathBuf;
 use tracing::{info, error, warn};
 
@@ -260,7 +261,11 @@ async fn handle_database_command(
     match cmd {
         DatabaseCommands::Migrate => {
             info!("🔄 Running database migrations...");
-            // TODO: Implement database migrations
+            let db_service = DatabaseService::new(config.database.clone()).await.map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
+            db_service.migrate().await.map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
+            if let Err(e) = db_service.initialize_ai_schema().await {
+                warn!("AI schema initialization failed: {}", e);
+            }
             info!("✅ Database migrations completed successfully");
         }
         DatabaseCommands::Reset { force } => {

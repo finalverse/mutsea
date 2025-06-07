@@ -14,6 +14,7 @@ description = "Mutsea command-line interface with OpenSim user management"
 [dependencies]
 mutsea-core = { path = "../mutsea-core" }
 mutsea-protocol = { path = "../mutsea-protocol" }
+mutsea-database = { path = "../mutsea-database" }
 tracing = { workspace = true }
 clap = { workspace = true }
 tokio = { workspace = true }
