@@ -10,3 +10,17 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
+tokio = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+mutsea-core = { path = "../mutsea-core", features = ["metrics"] }
+sqlx = { workspace = true, features = ["runtime-tokio-rustls", "postgres", "mysql", "sqlite", "uuid", "chrono", "json"] }
+uuid = { workspace = true }
+chrono = { workspace = true }
+metrics = { workspace = true }
+
+[features]
+default = []
+opensim-compat = []
