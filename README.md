@@ -53,6 +53,7 @@ nano config/mutsea.toml
 
 # Run database migrations
 cargo run --bin mutsea-cli -- migrate
+# This will also initialize AI-specific tables for advanced features
 ```
 
 4. Start the server:
