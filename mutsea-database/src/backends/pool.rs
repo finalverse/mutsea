@@ -3,8 +3,7 @@
 
 use crate::{
     error::{DatabaseError, DatabaseResult},
-    connection::Transaction,
-    manager::PoolStats,
+    connection::{Transaction, PoolStats},
     backends::{DatabaseBackend, PostgreSQLTransaction, MySQLTransaction, SQLiteTransaction},
 };
 use mutsea_core::config::DatabaseConfig;

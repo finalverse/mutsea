@@ -7,6 +7,7 @@
 pub mod error;
 pub mod backends;
 pub mod manager;
+pub mod metrics;
 pub mod utils;
 
 // OpenSim Compatibility Layer
@@ -84,6 +85,7 @@ impl MutseaDatabase {
 pub use backends::{BackendType, DatabasePool};
 pub use error::DatabaseError;
 pub use manager::DatabaseManager;
+pub use metrics::DatabaseMetrics;
 
 #[cfg(feature = "opensim-compat")]
 pub use opensim::{schema, models};
